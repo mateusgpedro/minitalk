@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minitalk_bonus.h"
-#include "../libft/libft.h"
-#include "../includes/ft_printf.h"
+#include "minitalk_bonus.h"
+#include "libft.h"
+#include "ft_printf.h"
 
 void	sighandler(int sig, siginfo_t *info, void *ucontext)
 {
 	static int bits;
 	static char final_msg;
 
-	(void) *ucontext;
+	(void) ucontext;
 	if (sig == SIGUSR1)
 		final_msg = ((1 << bits) | final_msg);
 	else

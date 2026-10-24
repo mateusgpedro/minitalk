@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minitalk.h"
-#include "../libft/libft.h"
-#include "../includes/ft_printf.h"
+#include "minitalk.h"
+#include "libft.h"
+#include "ft_printf.h"
 
 void	convert_signal_to_bytes(int server_pid, char client_msg)
 {

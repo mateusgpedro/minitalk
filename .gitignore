@@ -1,0 +1,16 @@
+# Compiled Object files
+*.o
+*.a
+
+# Executables
+client
+server
+client_bonus
+server_bonus
+
+# OS / Editor files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~

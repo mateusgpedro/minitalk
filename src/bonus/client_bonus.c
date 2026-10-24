@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minitalk_bonus.h"
-#include "../libft/libft.h"
-#include "../includes/ft_printf.h"
+#include "minitalk_bonus.h"
+#include "libft.h"
+#include "ft_printf.h"
 
 void	send_msg_to_server(int server_pid, char message_to_send)
 {

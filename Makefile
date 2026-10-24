@@ -6,17 +6,19 @@
 #    By: maguimar <maguimar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/10 12:23:07 by maguimar          #+#    #+#              #
-#    Updated: 2023/01/12 18:41:23 by maguimar         ###   ########.fr        #
+#    Updated: 2026/10/24 02:41:00 by maguimar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minitalk.a
+NAME = minitalk
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+INCLUDES = -I./includes -I./libft
 RM = rm -rf
 
-LIBFT = ./libft/libft.a
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
 CLIENT = client
 SERVER = server
@@ -24,37 +26,48 @@ SERVER = server
 CLIENT_BONUS = client_bonus
 SERVER_BONUS = server_bonus
 
-SRC_CLIENT = src/client.c
+SRC_CLIENT = src/mandatory/client.c
 OBJ_CLIENT = $(SRC_CLIENT:%.c=%.o)
 
-SRC_SERVER = src/server.c
+SRC_SERVER = src/mandatory/server.c
 OBJ_SERVER = $(SRC_SERVER:%.c=%.o)
 
-SRC_CLIENT_BONUS = src/client_bonus.c
+SRC_CLIENT_BONUS = src/bonus/client_bonus.c
 OBJ_CLIENT_BONUS = $(SRC_CLIENT_BONUS:%.c=%.o)
 
-SRC_SERVER_BONUS = src/server_bonus.c
+SRC_SERVER_BONUS = src/bonus/server_bonus.c
 OBJ_SERVER_BONUS = $(SRC_SERVER_BONUS:%.c=%.o)
 
-all: $(NAME)
+all: $(CLIENT) $(SERVER)
 
 $(LIBFT):
-		make bonus -C ./libft
+	@$(MAKE) bonus -C $(LIBFT_DIR)
 
-$(NAME) : $(OBJ_CLIENT) $(OBJ_SERVER) $(LIBFT)
-		@$(CC) $(CFLAGS) $(OBJ_CLIENT) $(LIBFT) -o $(CLIENT)
-		@$(CC) $(CFLAGS) $(OBJ_SERVER) $(LIBFT) -o $(SERVER)
+%.o: %.c
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-bonus: $(NAME) $(OBJ_CLIENT_BONUS) $(OBJ_SERVER_BONUS) $(LIBFT)
-		@$(CC) $(CFLAGS) $(OBJ_CLIENT_BONUS) $(LIBFT) -o $(CLIENT_BONUS)
-		@$(CC) $(CFLAGS) $(OBJ_SERVER_BONUS) $(LIBFT) -o $(SERVER_BONUS)
+$(CLIENT): $(OBJ_CLIENT) $(LIBFT)
+	@$(CC) $(CFLAGS) $(OBJ_CLIENT) $(LIBFT) -o $(CLIENT)
+
+$(SERVER): $(OBJ_SERVER) $(LIBFT)
+	@$(CC) $(CFLAGS) $(OBJ_SERVER) $(LIBFT) -o $(SERVER)
+
+bonus: $(CLIENT_BONUS) $(SERVER_BONUS)
+
+$(CLIENT_BONUS): $(OBJ_CLIENT_BONUS) $(LIBFT)
+	@$(CC) $(CFLAGS) $(OBJ_CLIENT_BONUS) $(LIBFT) -o $(CLIENT_BONUS)
+
+$(SERVER_BONUS): $(OBJ_SERVER_BONUS) $(LIBFT)
+	@$(CC) $(CFLAGS) $(OBJ_SERVER_BONUS) $(LIBFT) -o $(SERVER_BONUS)
 
 clean:
-		@$(MAKE) clean -C ./libft
-		@$(RM) $(OBJ_CLIENT) $(OBJ_SERVER) $(OBJ_CLIENT_BONUS) $(OBJ_SERVER_BONUS)
+	@$(MAKE) clean -C $(LIBFT_DIR)
+	@$(RM) $(OBJ_CLIENT) $(OBJ_SERVER) $(OBJ_CLIENT_BONUS) $(OBJ_SERVER_BONUS)
 
 fclean: clean
-		@$(RM) $(CLIENT) $(SERVER) $(CLIENT_BONUS) $(SERVER_BONUS)
-		@$(RM) $(LIBFT)
+	@$(MAKE) fclean -C $(LIBFT_DIR)
+	@$(RM) $(CLIENT) $(SERVER) $(CLIENT_BONUS) $(SERVER_BONUS)
 
 re: fclean all
+
+.PHONY: all bonus clean fclean re
